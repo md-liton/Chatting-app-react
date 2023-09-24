@@ -3,9 +3,11 @@ import Registration_img from '../../assets/registration.png';
 import {BsEyeSlash,BsEye} from 'react-icons/bs';
 import { ToastContainer, toast } from 'react-toastify';
 import { getAuth, createUserWithEmailAndPassword , sendEmailVerification} from "firebase/auth";
+import { Link,useNavigate } from 'react-router-dom';
 
 const Registration = () => {
     const auth = getAuth();
+    const navigate = useNavigate();
 
     const [email , setEmail] = useState('')
     const [fullName , setFullName] = useState('')
@@ -64,6 +66,9 @@ const Registration = () => {
                     setEmail('')
                     setFullName('')
                     setPassword('')
+                    setTimeout(()=>{
+                        navigate('/login')
+                    },3000)
                 });
             }).catch((error) =>{
                 setEmailErr('this email already used');
@@ -134,7 +139,7 @@ const Registration = () => {
                     <div onClick={handleSubmit} >
                         <button  className="mt-[30px] text-center w-[70%] py-[15px]  bg-primary_color rounded-[100px] text[20px] font-nunito font-semibold text-white">Sign up</button>
                     </div>
-                    <p className="mt-[10px] text-center w-[70%] text-[15px] font-normal font-open text-secondary_color">Already  have an account ? <span className="font-bold text-[#EA6C00]">Sign In</span></p>
+                    <p className="mt-[10px] text-center w-[70%] text-[15px] font-normal font-open text-secondary_color">Already  have an account ? <Link to='/Login' className="font-bold text-[#EA6C00] cursor-pointer">Sign In</Link></p>
 
 
                 </div>

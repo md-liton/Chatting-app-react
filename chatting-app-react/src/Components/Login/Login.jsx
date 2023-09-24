@@ -1,9 +1,17 @@
-import React, { useState } from 'react'
-import {BsEyeSlash,BsEye} from 'react-icons/bs'
-import login from '../../assets/login.jpg'
-import google from '../../assets/google.svg'
+import React, { useState } from 'react';
+import {BsEyeSlash,BsEye} from 'react-icons/bs';
+import login from '../../assets/login.jpg';
+import google from '../../assets/google.svg';
+import { Link,useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 const Login = () => {
+    const auth = getAuth();
+    const navigate = useNavigate();
+    const provider = new GoogleAuthProvider();
+
+
     const [email,setEmail]=useState('')
     const [emailErr,setEmailErr]=useState('')
 
@@ -35,31 +43,48 @@ const Login = () => {
         }
         if(!password){
             setPasswordErr('please give your password');
-        }else{
-            if(!/^(?=.*[a-z])/.test(password)){
-                setPasswordErr('please use small latter')
-            }else if(!/^(?=.*[A-Z])/.test(password)){
-                setPasswordErr('please use capital latter')
-            }else if(!/^(?=.*[0-9])/.test(password)){
-                setPasswordErr('please use number')
-            }else if(!/^(?=.*[!@#$%^&*])/.test(password)){
-                setPasswordErr('please symble')
-            }else if(!/^(?=.{8,})/.test(password)){
-                setPasswordErr('minimum 8 charecter')
-            }
+        }
+        if(email && password){
+            signInWithEmailAndPassword(auth, email, password)
+            .then(() => {
+                toast.success('login successful ');
+                    setEmail('')
+                    setPassword('')
+                    setTimeout(()=>{
+                            navigate('/')
+                        },3000)
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    if(errorCode.includes('auth/invalid-login-credentials')){
+                        toast.error('user not match...please try again');
+                }
+            });
         }
 
+    }
+
+    const handleGoogle =()=>{
+        signInWithPopup(auth, provider)
+        .then(() => {
+            setTimeout(()=>{
+                navigate('/')
+            },3000)
+        }).catch((error) => {
+            const errorCode = error.code;
+        });
     }
 
 
   return (
     <>
     <section className="registration">
+    <ToastContainer position="top-center" theme="dark"/>
         <div className="registration_main flex">
             <div className="registration_left w-1/2 flex justify-end pt-[100px] pr-[70px]">
                 <div className="inf ">
                     <h1 className="font-nunito font-bold text-[35px] text-secondary_color">Login to your account!</h1>
-                    <div className='w-[70%] flex gap-[10px] text-[14px] font-bold font-open text-secondary_color border border-[#B3B3C9] mt-[30px] py-[20px] pl-[30px] pr-[40px] rounded-[10px] cursor-pointer'>
+                    <div onClick={handleGoogle} className='w-[70%] flex gap-[10px] text-[14px] font-bold font-open text-secondary_color border border-[#B3B3C9] mt-[30px] py-[20px] pl-[30px] pr-[40px] rounded-[10px] cursor-pointer'>
                         <img src={google} alt="img" />
                         <p>Login with Google</p>
                     </div>
@@ -83,7 +108,10 @@ const Login = () => {
                     <div onClick={handleLogin}>
                         <button  className="mt-[30px] text-center w-full py-[15px]  bg-primary_color rounded-[10px] text[20px] font-nunito font-semibold text-white">Login to Continue</button>
                     </div>
-                    <p className="mt-[10px] text-[15px] font-normal font-open text-secondary_color">Don’t have an account ? <span className="font-bold text-[#EA6C00] cursor-pointer">Sign In</span></p> 
+                    <p className="mt-[10px] text-center text-[15px] font-normal font-open text-secondary_color">Don’t have an account ? <Link to='/registration' className="font-bold text-[#EA6C00] cursor-pointer">Sign Up</Link ></p>
+                    <div className='text-center'>
+                    <Link to='/forgotpassword' className="mt-[10px]  text-[15px] font-normal font-open text-secondary_color cursor-pointer">forgot password</Link>
+                    </div>
 
 
                 </div>
