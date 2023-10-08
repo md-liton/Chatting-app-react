@@ -5,11 +5,14 @@ import google from '../../assets/google.svg';
 import { Link,useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { useDispatch } from 'react-redux';
+import { userLogin } from '../../Slices/UserSlice';
 
 const Login = () => {
     const auth = getAuth();
     const navigate = useNavigate();
     const provider = new GoogleAuthProvider();
+    const dispatch = useDispatch();
 
 
     const [email,setEmail]=useState('')
@@ -46,13 +49,15 @@ const Login = () => {
         }
         if(email && password){
             signInWithEmailAndPassword(auth, email, password)
-            .then(() => {
+            .then((user) => {
+                dispatch(userLogin(user.user))
+                localStorage.setItem('stringify',JSON.stringify(userLogin(user)))
                 toast.success('login successful ');
                     setEmail('')
                     setPassword('')
                     setTimeout(()=>{
                             navigate('/')
-                        },3000)
+                        },2000)
                 })
                 .catch((error) => {
                     const errorCode = error.code;
