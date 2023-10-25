@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector} from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SideBar from './SideBar';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import SearchBar from './SearchBar';
+import GroupList from './GroupList';
+import FriendRequest from './FriendRequest';
+import Friends from './Friends';
+import MyGroups from './MyGroups';
+import Users from './Users';
+import BlockUsers from './BlockUsers';
 
 const Home = () => {
   const auth = getAuth();
@@ -35,12 +42,27 @@ const Home = () => {
           <div className='w-[186px] bg-primary_color rounded-[10px]'>
             <SideBar/>
           </div>
-          <div className='w-[427px]'>asdfasd</div>
-          <div className='w-[344px]'>asdfsda</div>
-          <div className='w-[344px]'>sdfsdf</div>
+          <div className='w-[420px]'>
+            <SearchBar/>
+            <GroupList/>
+            <FriendRequest/>
+          </div>
+          <div className='w-[420px]'>
+            <Friends/>
+            <MyGroups/>
+          </div>
+          <div className='w-[420px]'>
+            <Users/>
+            <BlockUsers/>
+          </div>
         </div>
       </div> 
-      : <h1 className='text-[50px] text-center font-bold text-primary_color'>Please Verify Your Email</h1>
+      : <div className='py-[100px]'>
+        <h1 className='text-[50px] text-center font-bold text-primary_color'>Please Verify Your Email</h1>
+        <div className='flex justify-center pt-[25px]'>
+        <Link to='/login' className=' font-bold text-white bg-primary_color py-[15px] px-[25px] rounded-[10px]'>Back to Login</Link>
+        </div>
+       </div>
       }
     </>
   )
