@@ -7,6 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useDispatch } from 'react-redux';
 import { userLogin } from '../../Slices/UserSlice';
+import { ColorRing } from  'react-loader-spinner';
 
 const Login = () => {
     const auth = getAuth();
@@ -22,6 +23,7 @@ const Login = () => {
     const [password,setPassword]=useState('')
     const [passwordErr,setPasswordErr]=useState('')
     const [passwordShow,setPasswordShow]=useState(false)
+    const [loading,setLoading] = useState(false)
 
 
     const handleEmail =(e)=>{
@@ -53,11 +55,12 @@ const Login = () => {
                 dispatch(userLogin(user.user))
                 localStorage.setItem('stringify',JSON.stringify(userLogin(user)))
                 toast.success('login successful ');
+                setLoading(true)
                     setEmail('')
                     setPassword('')
                     setTimeout(()=>{
                             navigate('/')
-                        },2000)
+                        },1500)
                 })
                 .catch((error) => {
                     const errorCode = error.code;
@@ -87,7 +90,7 @@ const Login = () => {
     <ToastContainer position="top-center" theme="dark"/>
         <div className="registration_main flex">
             <div className="registration_left w-1/2 flex justify-end pt-[100px] pr-[70px]">
-                <div className="inf ">
+                <div className="inf  relative">
                     <h1 className="font-nunito font-bold text-[35px] text-secondary_color">Login to your account!</h1>
                     <div onClick={handleGoogle} className='w-[70%] flex gap-[10px] text-[14px] font-bold font-open text-secondary_color border border-[#B3B3C9] mt-[30px] py-[20px] pl-[30px] pr-[40px] rounded-[10px] cursor-pointer'>
                         <img src={google} alt="img" />
@@ -110,13 +113,38 @@ const Login = () => {
                         
                         
                     </div>
-                    <div onClick={handleLogin}>
-                        <button  className="mt-[30px] text-center w-full py-[15px]  bg-primary_color rounded-[10px] text[20px] font-nunito font-semibold text-white">Login to Continue</button>
+
+
+
+                    {
+                        loading ?
+                        <div className=' absolute top-[30%] left-[50%] translate-y-[-50%] bg-[#e5e5e5] w-[500px] h-[300px] flex justify-center items-center rounded-[10px]'>
+                        <div>
+
+
+                        <h1 className='text-secondary_color text-[25px] font-semibold'>please wait</h1>
+                        <div className='flex justify-center items-center'>
+                        <ColorRing visible={true} height="80" width="80" ariaLabel="blocks-loading" wrapperStyle={{}}wrapperClass="blocks-wrapper" colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}/>
+                        </div>
+
+
+                        </div>
+
                     </div>
+                    : <div onClick={handleLogin}>
+                    <button  className="mt-[30px] text-center w-full py-[15px]  bg-primary_color rounded-[10px] text[20px] font-nunito font-semibold text-white">Login to Continue</button>
+                </div>
+                    }
+
                     <p className="mt-[10px] text-center text-[15px] font-normal font-open text-secondary_color">Don’t have an account ? <Link to='/registration' className="font-bold text-[#EA6C00] cursor-pointer">Sign Up</Link ></p>
                     <div className='text-center'>
                     <Link to='/forgotpassword' className="mt-[10px]  text-[15px] font-normal font-open text-secondary_color cursor-pointer">forgot password</Link>
                     </div>
+
+
+                    
+
+                    
 
 
                 </div>
