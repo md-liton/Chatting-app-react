@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Registration_img from '../../assets/registration.png';
 import {BsEyeSlash,BsEye} from 'react-icons/bs';
 import { ToastContainer, toast } from 'react-toastify';
-import { getAuth, createUserWithEmailAndPassword , sendEmailVerification} from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword , sendEmailVerification, updateProfile} from "firebase/auth";
 import { Link,useNavigate } from 'react-router-dom';
 
 const Registration = () => {
@@ -60,21 +60,24 @@ const Registration = () => {
         }
         if(email && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) && fullName && password && /^(?=.*[a-z])/.test(password) && /^(?=.*[A-Z])/.test(password) && /^(?=.*[0-9])/.test(password) && /^(?=.*[!@#$%^&*])/.test(password) && /^(?=.*[!@#$%^&*])/.test(password)){
             createUserWithEmailAndPassword(auth, email, password).then(()=>{
-                sendEmailVerification(auth.currentUser)
-                .then(() => {
-                    toast.success('Registration Done please verify your Email ');
+                updateProfile(auth.currentUser, {
+                    displayName: fullName, 
+                    photoURL: "https://example.com/jane-q-user/profile.jpg"
+                  }).then(() => {
+                    sendEmailVerification(auth.currentUser)
+                      toast.success('Registration Done please verify your Email ');
                     setEmail('')
                     setFullName('')
                     setPassword('')
                     setTimeout(()=>{
                         navigate('/login')
                     },3000)
-                });
-            }).catch((error) =>{
-                setEmailErr('this email already used');
-            })
+                  })
+                }).catch((error) =>{
+                    setEmailErr('this email already used');
+                })
+            }
         }
-    }
 
 
   return (

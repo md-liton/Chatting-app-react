@@ -4,25 +4,31 @@ import {AiOutlineHome,AiOutlineMessage,AiOutlineCloudUpload} from 'react-icons/a
 import{IoMdNotificationsOutline,IoMdLogOut} from 'react-icons/io';
 import {FiSettings} from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
-import { getAuth, signOut } from "firebase/auth";
-import { useDispatch} from 'react-redux';
+import { getAuth, signOut, updateProfile } from "firebase/auth";
+import { useDispatch, useSelector} from 'react-redux';
 import { userLogin } from '../../Slices/UserSlice';
 import './SideBar.css';
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
+import { getDownloadURL, getStorage, ref, uploadString } from "firebase/storage";
 
 
 const SideBar = () => {
   const auth = getAuth();
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const storage = getStorage();
+  const data = useSelector(state => state.userLoginInfo.userInfo.payload.user.photoURL)
+  console.log(data);
+  
+
+
+
+
 
   const [upload,setUpload]=useState(false)
-
-
   const [image, setImage] = useState('');
-  
-  // const [cropData, setCropData] = useState('');
+  const [cropData, setCropData] = useState("");
   const cropperRef = createRef();
 
   const handleLogout =()=>{
@@ -55,11 +61,25 @@ const onChange = (e) => {
     reader.readAsDataURL(files[0]);
   };
 
-  // const getCropData = () => {
-  //   if (typeof cropperRef.current?.cropper !== "undefined") {
-  //     setCropData(cropperRef.current?.cropper.getCroppedCanvas().toDataURL());
-  //   }
-  // };
+  const getCropData = () => {
+    if (typeof cropperRef.current?.cropper !== "undefined") {
+      setCropData(cropperRef.current?.cropper.getCroppedCanvas().toDataURL());
+
+      const storageRef = ref(storage,auth.currentUser.uid);
+
+      const message4 = cropperRef.current?.cropper.getCroppedCanvas().toDataURL();
+          uploadString(storageRef, message4, 'data_url').then((snapshot) => {
+          console.log('Uploaded a data_url string!');
+          getDownloadURL(storageRef).then((downloadURL) => {
+            console.log('File available at', downloadURL);
+            updateProfile(auth.currentUser, {
+              photoURL: downloadURL,
+            })
+          });
+        });
+        setUpload(false)
+      }
+    };
 
 
 
@@ -113,7 +133,7 @@ const onChange = (e) => {
 
             <input onChange={onChange} type="file" />
             <div className='mt-[15px]'>
-              <button className='text-[14px] font-bold font-open text-white bg-secondary_color py-[15px] px-[20px] rounded-[8px] mr-[15px]'>Upload</button>
+              <button onClick={getCropData } className='text-[14px] font-bold font-open text-white bg-secondary_color py-[15px] px-[20px] rounded-[8px] mr-[15px]'>Upload</button>
               <button onClick={handleCancel}  className='text-[14px] font-bold font-open text-white bg-secondary_color py-[15px] px-[20px] rounded-[8px]'>Cancel</button>
             </div>
           </div>
@@ -121,8 +141,8 @@ const onChange = (e) => {
         :
         <div onClick={handleUpload}  className='py-[25px] '>
             <div className=' flex justify-center '>
-            <div className='w-20 h-20 rounded-full relative hover:after:content-[""] hover:after:absolute hover:after:top-0 hover:after:left-0 hover:after:bg-overlay_color hover:after:h-full hover:after:w-full hover:after:rounded-full after:duration-300 cursor-pointer profile'>
-            <img className='cursor-pointer' src={profile} alt="img" />
+            <div className='w-20 h-20 rounded-full relative hover:after:content-[""] hover:after:absolute hover:after:top-0 hover:after:left-0 hover:after:bg-overlay_color hover:after:h-full hover:after:w-full hover:after:rounded-full after:duration-300 cursor-pointer profile mb-[10px]'>
+            <img className='cursor-pointer h-full w-full rounded-full' src={data} alt="img" />
             <div>
             <AiOutlineCloudUpload className='icon h-[30px] w-[30px] absolute top-[25px] left-[25px] text-white '/>
             </div>

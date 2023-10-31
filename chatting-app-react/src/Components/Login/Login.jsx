@@ -98,12 +98,12 @@ const Login = () => {
                     </div>
 
                     <div className="mt-[35px] relative">
-                        <p className=" bg-white ] text-[16px] font-bold font-nunito text-[#585D8E]">Email Address</p>
+                        <p className=" bg-white  text-[16px] font-bold font-nunito text-[#585D8E]">Email Address</p>
                         <input onChange={handleEmail}  className=" w-full py-[10px] border-b border-[#B8B9CE] text-[20px] font-bold font-nunito text-secondary_color focus:outline-none" type="email" placeholder="Email"/>
                         <p className='absolute left-0 bottom-[-27px] text-[16px] font-bold font-nunito text-red-500'>{emailErr}</p>
                     </div>
                     <div className="mt-[35px] relative">
-                        <p className=" bg-white ] text-[16px] font-bold font-nunito text-[#585D8E]">Email Address</p>
+                        <p className=" bg-white  text-[16px] font-bold font-nunito text-[#585D8E]">Email Address</p>
                         <input onChange={handlePassword} className=" w-full py-[10px] border-b border-[#B8B9CE] text-[20px] font-bold font-nunito text-secondary_color focus:outline-none" type={passwordShow ? 'text' : 'password'} placeholder="Password"/>
                         <p className='absolute left-0 bottom-[-27px] text-[16px] font-bold font-nunito text-red-500'>{passwordErr}</p>
                         {
