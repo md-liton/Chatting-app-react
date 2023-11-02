@@ -11,6 +11,7 @@ import './SideBar.css';
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import { getDownloadURL, getStorage, ref, uploadString } from "firebase/storage";
+import { ColorRing } from  'react-loader-spinner';
 
 
 const SideBar = () => {
@@ -19,13 +20,13 @@ const SideBar = () => {
   const dispatch = useDispatch()
   const storage = getStorage();
   const data = useSelector(state => state.userLoginInfo.userInfo.payload.user.photoURL)
-  console.log(data);
+
   
 
 
 
 
-
+  const [loading,setLoading] = useState(false)
   const [upload,setUpload]=useState(false)
   const [image, setImage] = useState('');
   const [cropData, setCropData] = useState("");
@@ -40,6 +41,7 @@ const SideBar = () => {
   }
   const handleUpload=()=>{
     setUpload(true)
+    setLoading(false)
   }
   const handleCancel = ()=>{
     setUpload(false)
@@ -62,6 +64,7 @@ const onChange = (e) => {
   };
 
   const getCropData = () => {
+    setLoading(true)
     if (typeof cropperRef.current?.cropper !== "undefined") {
       setCropData(cropperRef.current?.cropper.getCroppedCanvas().toDataURL());
 
@@ -74,10 +77,12 @@ const onChange = (e) => {
             console.log('File available at', downloadURL);
             updateProfile(auth.currentUser, {
               photoURL: downloadURL,
+            }).then(()=>{
+              setUpload(false);
+              setImage(false)
             })
           });
         });
-        setUpload(false)
       }
     };
 
@@ -99,7 +104,7 @@ const onChange = (e) => {
               image ?
               <div className="img-preview h-28 w-28 rounded-full overflow-hidden" />
               :
-            <img className=' h-full w-full rounded-full' src={profile} alt="img" />
+             <img className=' h-full w-full rounded-full' src={data} alt="img" />
             }
             </div>
 
@@ -133,7 +138,24 @@ const onChange = (e) => {
 
             <input onChange={onChange} type="file" />
             <div className='mt-[15px]'>
+              {
+                loading ?
+                <div className=' absolute top-[50%] left-[31.7%] translate-y-[-50%] bg-[#6b7280] w-[500px] h-[300px] flex justify-center items-center rounded-[10px]'>
+                        <div>
+
+
+                        <h1 className='text-white text-[25px] font-semibold'>please wait</h1>
+                        <div className='flex justify-center items-center'>
+                        <ColorRing visible={true} height="80" width="80" ariaLabel="blocks-loading" wrapperStyle={{}}wrapperClass="blocks-wrapper" colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}/>
+                        </div>
+
+
+                        </div>
+
+                </div>
+                :
               <button onClick={getCropData } className='text-[14px] font-bold font-open text-white bg-secondary_color py-[15px] px-[20px] rounded-[8px] mr-[15px]'>Upload</button>
+              }
               <button onClick={handleCancel}  className='text-[14px] font-bold font-open text-white bg-secondary_color py-[15px] px-[20px] rounded-[8px]'>Cancel</button>
             </div>
           </div>
@@ -141,8 +163,13 @@ const onChange = (e) => {
         :
         <div onClick={handleUpload}  className='py-[25px] '>
             <div className=' flex justify-center '>
-            <div className='w-20 h-20 rounded-full relative hover:after:content-[""] hover:after:absolute hover:after:top-0 hover:after:left-0 hover:after:bg-overlay_color hover:after:h-full hover:after:w-full hover:after:rounded-full after:duration-300 cursor-pointer profile mb-[10px]'>
-            <img className='cursor-pointer h-full w-full rounded-full' src={data} alt="img" />
+            <div className='w-20 h-20 rounded-full relative hover:after:content-[""] hover:after:absolute hover:after:top-0 hover:after:left-0 hover:after:bg-overlay_color hover:after:h-full hover:after:w-full hover:after:rounded-full after:duration-300 cursor-pointer profile mb-[10px] border-2'>
+              {
+                data ?
+                <img className='cursor-pointer h-full w-full rounded-full' src={data} alt="img" />
+                :
+                <img className='cursor-pointer h-full w-full rounded-full' src={profile} alt="img" />
+              }
             <div>
             <AiOutlineCloudUpload className='icon h-[30px] w-[30px] absolute top-[25px] left-[25px] text-white '/>
             </div>
