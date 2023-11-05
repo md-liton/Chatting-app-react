@@ -59,7 +59,7 @@ const Registration = () => {
             }
         }
         if(email && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) && fullName && password && /^(?=.*[a-z])/.test(password) && /^(?=.*[A-Z])/.test(password) && /^(?=.*[0-9])/.test(password) && /^(?=.*[!@#$%^&*])/.test(password) && /^(?=.*[!@#$%^&*])/.test(password)){
-            createUserWithEmailAndPassword(auth, email, password).then(()=>{
+            createUserWithEmailAndPassword(auth, email, password).then((user)=>{
                 updateProfile(auth.currentUser, {
                     displayName: fullName, 
                     photoURL: "https://example.com/jane-q-user/profile.jpg"

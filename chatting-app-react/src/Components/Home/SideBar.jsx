@@ -1,5 +1,4 @@
 import React, { createRef, useState } from 'react';
-import profile from '../../assets/profile.svg';
 import {AiOutlineHome,AiOutlineMessage,AiOutlineCloudUpload} from 'react-icons/ai';
 import{IoMdNotificationsOutline,IoMdLogOut} from 'react-icons/io';
 import {FiSettings} from 'react-icons/fi';
@@ -19,7 +18,8 @@ const SideBar = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const storage = getStorage();
-  const data = useSelector(state => state.userLoginInfo.userInfo.payload.user.photoURL)
+  const data = useSelector(state => state.userLoginInfo.userInfo.payload.user)
+  console.log(data);
 
   
 
@@ -64,27 +64,24 @@ const onChange = (e) => {
   };
 
   const getCropData = () => {
-    setLoading(true)
     if (typeof cropperRef.current?.cropper !== "undefined") {
       setCropData(cropperRef.current?.cropper.getCroppedCanvas().toDataURL());
 
-      const storageRef = ref(storage,auth.currentUser.uid);
+      const storageRef = ref(storage, auth.currentUser.uid);
 
       const message4 = cropperRef.current?.cropper.getCroppedCanvas().toDataURL();
-          uploadString(storageRef, message4, 'data_url').then((snapshot) => {
-          console.log('Uploaded a data_url string!');
-          getDownloadURL(storageRef).then((downloadURL) => {
-            console.log('File available at', downloadURL);
-            updateProfile(auth.currentUser, {
-              photoURL: downloadURL,
-            }).then(()=>{
-              setUpload(false);
-              setImage(false)
-            })
-          });
+      uploadString(storageRef, message4, 'data_url').then((snapshot) => {
+        console.log('Uploaded a data_url string!');
+        getDownloadURL(storageRef).then((downloadURL) => {
+          console.log('File available at', downloadURL);
+          updateProfile(auth.currentUser, {
+            displayName: fullName, 
+            photoURL: downloadURL
+          })
         });
-      }
-    };
+      });
+    }
+  };
 
 
 
@@ -99,12 +96,12 @@ const onChange = (e) => {
             <h3  className="font-nunito font-bold text-[35px] text-secondary_color">Upload a profile picture</h3>
 
 
-            <div className='my-[15px]  h-28 w-28 rounded-full mx-auto'>
+            <div className='my-[15px]  h-28 w-28 rounded-full mx-auto border-2'>
             {
               image ?
               <div className="img-preview h-28 w-28 rounded-full overflow-hidden" />
               :
-             <img className=' h-full w-full rounded-full' src={data} alt="img" />
+             <img className=' h-full w-full rounded-full' src={data.photoURL} alt="img" />
             }
             </div>
 
@@ -164,12 +161,9 @@ const onChange = (e) => {
         <div onClick={handleUpload}  className='py-[25px] '>
             <div className=' flex justify-center '>
             <div className='w-20 h-20 rounded-full relative hover:after:content-[""] hover:after:absolute hover:after:top-0 hover:after:left-0 hover:after:bg-overlay_color hover:after:h-full hover:after:w-full hover:after:rounded-full after:duration-300 cursor-pointer profile mb-[10px] border-2'>
-              {
-                data ?
-                <img className='cursor-pointer h-full w-full rounded-full' src={data} alt="img" />
-                :
-                <img className='cursor-pointer h-full w-full rounded-full' src={profile} alt="img" />
-              }
+
+              <img className='cursor-pointer h-full w-full rounded-full' src={data.photoURL} alt="img" />
+
             <div>
             <AiOutlineCloudUpload className='icon h-[30px] w-[30px] absolute top-[25px] left-[25px] text-white '/>
             </div>
