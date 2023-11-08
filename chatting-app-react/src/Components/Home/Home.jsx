@@ -20,6 +20,8 @@ const Home = () => {
   onAuthStateChanged(auth, (user) => {
     if (user.emailVerified) {
       setVerify(true)
+      dispatch(userLogin(user))
+      localStorage.setItem('stringify',JSON.stringify(userLogin(user)))
     }
   });
 

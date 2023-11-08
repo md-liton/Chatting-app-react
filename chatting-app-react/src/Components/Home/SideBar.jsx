@@ -7,6 +7,7 @@ import { getAuth, signOut, updateProfile } from "firebase/auth";
 import { useDispatch, useSelector} from 'react-redux';
 import { userLogin } from '../../Slices/UserSlice';
 import './SideBar.css';
+import profile from '../../assets/profile.svg'
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import { getDownloadURL, getStorage, ref, uploadString } from "firebase/storage";
@@ -18,8 +19,8 @@ const SideBar = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const storage = getStorage();
-  const data = useSelector(state => state.userLoginInfo.userInfo.payload.user)
-  console.log(data);
+  const data = useSelector(state => state.userLoginInfo.userInfo)
+  console.log(data,'dataaaaaaaaaaa');
 
   
 
@@ -72,13 +73,13 @@ const onChange = (e) => {
       const message4 = cropperRef.current?.cropper.getCroppedCanvas().toDataURL();
       uploadString(storageRef, message4, 'data_url').then((snapshot) => {
         console.log('Uploaded a data_url string!');
-        getDownloadURL(storageRef).then((downloadURL) => {
-          console.log('File available at', downloadURL);
-          updateProfile(auth.currentUser, {
-            displayName: fullName, 
-            photoURL: downloadURL
-          })
-        });
+        // getDownloadURL(storageRef).then((downloadURL) => {
+        //   console.log('File available at', downloadURL);
+        //   updateProfile(auth.currentUser, {
+        //     displayName: fullName, 
+        //     photoURL: downloadURL
+        //   })
+        // });
       });
     }
   };
@@ -101,7 +102,7 @@ const onChange = (e) => {
               image ?
               <div className="img-preview h-28 w-28 rounded-full overflow-hidden" />
               :
-             <img className=' h-full w-full rounded-full' src={data.photoURL} alt="img" />
+             <img className=' h-full w-full rounded-full' src={profile} alt="img" />
             }
             </div>
 
@@ -162,7 +163,7 @@ const onChange = (e) => {
             <div className=' flex justify-center '>
             <div className='w-20 h-20 rounded-full relative hover:after:content-[""] hover:after:absolute hover:after:top-0 hover:after:left-0 hover:after:bg-overlay_color hover:after:h-full hover:after:w-full hover:after:rounded-full after:duration-300 cursor-pointer profile mb-[10px] border-2'>
 
-              <img className='cursor-pointer h-full w-full rounded-full' src={data.photoURL} alt="img" />
+              <img className='cursor-pointer h-full w-full rounded-full' src={profile} alt="img" />
 
             <div>
             <AiOutlineCloudUpload className='icon h-[30px] w-[30px] absolute top-[25px] left-[25px] text-white '/>

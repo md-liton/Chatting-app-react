@@ -52,7 +52,7 @@ const Login = () => {
         if(email && password){
             signInWithEmailAndPassword(auth, email, password)
             .then((user) => {
-                dispatch(userLogin(user.user))
+                dispatch(userLogin(user))
                 localStorage.setItem('stringify',JSON.stringify(userLogin(user)))
                 toast.success('login successful ');
                 setLoading(true)
