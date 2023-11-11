@@ -7,7 +7,6 @@ import { getAuth, signOut, updateProfile } from "firebase/auth";
 import { useDispatch, useSelector} from 'react-redux';
 import { userLogin } from '../../Slices/UserSlice';
 import './SideBar.css';
-import profile from '../../assets/profile.svg'
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import { getDownloadURL, getStorage, ref, uploadString } from "firebase/storage";
@@ -19,8 +18,7 @@ const SideBar = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const storage = getStorage();
-  const data = useSelector(state => state.userLoginInfo.userInfo)
-  console.log(data,'dataaaaaaaaaaa');
+  const data = useSelector(state => state.userLoginInfo.userInfo.user)
 
   
 
@@ -66,6 +64,7 @@ const onChange = (e) => {
 
   const getCropData = () => {
     if (typeof cropperRef.current?.cropper !== "undefined") {
+      setLoading(true)
       setCropData(cropperRef.current?.cropper.getCroppedCanvas().toDataURL());
 
       const storageRef = ref(storage, auth.currentUser.uid);
@@ -73,14 +72,18 @@ const onChange = (e) => {
       const message4 = cropperRef.current?.cropper.getCroppedCanvas().toDataURL();
       uploadString(storageRef, message4, 'data_url').then((snapshot) => {
         console.log('Uploaded a data_url string!');
-        // getDownloadURL(storageRef).then((downloadURL) => {
-        //   console.log('File available at', downloadURL);
-        //   updateProfile(auth.currentUser, {
-        //     displayName: fullName, 
-        //     photoURL: downloadURL
-        //   })
-        // });
+        getDownloadURL(storageRef).then((downloadURL) => {
+          console.log('File available at', downloadURL);
+          updateProfile(auth.currentUser, {
+            photoURL: downloadURL,
+          }).then(()=>{
+            setUpload(false)
+            setImage(false)
+          })
+        });
       });
+    }else{
+      alert("please select a photo")
     }
   };
 
@@ -98,18 +101,14 @@ const onChange = (e) => {
 
 
             <div className='my-[15px]  h-28 w-28 rounded-full mx-auto border-2'>
-            {
-              image ?
-              <div className="img-preview h-28 w-28 rounded-full overflow-hidden" />
-              :
-             <img className=' h-full w-full rounded-full' src={profile} alt="img" />
-            }
+              <img className=' h-full w-full rounded-full' src={data.photoURL} alt="img" />
             </div>
+            <h1 className='text-[15px] font-semibold text-primary_color text-center mb-[15px]'>{data.displayName}</h1>
 
 
             
 
-            {
+          {
               image &&
               <Cropper
               className='mb-[15px]'
@@ -152,9 +151,12 @@ const onChange = (e) => {
 
                 </div>
                 :
-              <button onClick={getCropData } className='text-[14px] font-bold font-open text-white bg-secondary_color py-[15px] px-[20px] rounded-[8px] mr-[15px]'>Upload</button>
+              <div>
+                <button onClick={getCropData } className='text-[14px] font-bold font-open text-white bg-secondary_color py-[15px] px-[20px] rounded-[8px] mr-[15px]'>Upload</button>
+                <button onClick={handleCancel}  className='text-[14px] font-bold font-open text-white bg-secondary_color py-[15px] px-[20px] rounded-[8px]'>Cancel</button>
+              </div>
               }
-              <button onClick={handleCancel}  className='text-[14px] font-bold font-open text-white bg-secondary_color py-[15px] px-[20px] rounded-[8px]'>Cancel</button>
+              
             </div>
           </div>
         </div>
@@ -163,7 +165,8 @@ const onChange = (e) => {
             <div className=' flex justify-center '>
             <div className='w-20 h-20 rounded-full relative hover:after:content-[""] hover:after:absolute hover:after:top-0 hover:after:left-0 hover:after:bg-overlay_color hover:after:h-full hover:after:w-full hover:after:rounded-full after:duration-300 cursor-pointer profile mb-[10px] border-2'>
 
-              <img className='cursor-pointer h-full w-full rounded-full' src={profile} alt="img" />
+              <img className='cursor-pointer h-full w-full rounded-full' src={data.photoURL} alt="img" />
+              <h1 className='text-[15px] font-semibold text-white text-center'>{data.displayName}</h1>
 
             <div>
             <AiOutlineCloudUpload className='icon h-[30px] w-[30px] absolute top-[25px] left-[25px] text-white '/>

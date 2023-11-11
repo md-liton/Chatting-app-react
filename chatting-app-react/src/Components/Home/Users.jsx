@@ -1,8 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {BsThreeDotsVertical} from 'react-icons/bs';
 import profile from '../../assets/profile.svg';
+import { getDatabase, ref, onValue } from "firebase/database";
 
 const Users = () => {
+    const db = getDatabase();
+
+    useEffect(()=>{
+        const userRef = ref(db, 'user/');
+        onValue(userRef, (snapshot) => {
+            console.log(userRef);
+            console.log(snapshot);
+            // const data = snapshot.val();
+            // updateStarCount(postElement, data);
+            // console.log(data,'snapppppppppppppp');
+        });
+    },[])
+
+
   return (
     <>
     <div className='p-[10px] border overflow-y-scroll h-[315px] shadow-md rounded-[5px]'>

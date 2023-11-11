@@ -4,10 +4,12 @@ import {BsEyeSlash,BsEye} from 'react-icons/bs';
 import { ToastContainer, toast } from 'react-toastify';
 import { getAuth, createUserWithEmailAndPassword , sendEmailVerification, updateProfile} from "firebase/auth";
 import { Link,useNavigate } from 'react-router-dom';
+import { getDatabase, ref, set } from "firebase/database";
 
 const Registration = () => {
     const auth = getAuth();
     const navigate = useNavigate();
+    const db = getDatabase();
 
     const [email , setEmail] = useState('')
     const [fullName , setFullName] = useState('')
@@ -62,7 +64,7 @@ const Registration = () => {
             createUserWithEmailAndPassword(auth, email, password).then((user)=>{
                 updateProfile(auth.currentUser, {
                     displayName: fullName, 
-                    photoURL: "https://example.com/jane-q-user/profile.jpg"
+                    photoURL: "./src/assets/profile.svg"
                   }).then(() => {
                     sendEmailVerification(auth.currentUser)
                       toast.success('Registration Done please verify your Email ');
@@ -71,8 +73,13 @@ const Registration = () => {
                     setPassword('')
                     setTimeout(()=>{
                         navigate('/login')
-                    },3000)
-                  })
+                    },3000);
+                  }).then(()=>{
+                    set(ref(db, 'users/' + user.user.uid), {
+                        username: user.user.displayName,
+                        email: user.user.email,
+                      });
+                    })
                 }).catch((error) =>{
                     setEmailErr('this email already used');
                 })
