@@ -9,8 +9,8 @@ const Users = () => {
     useEffect(()=>{
         const userRef = ref(db, 'user/');
         onValue(userRef, (snapshot) => {
-            console.log(userRef);
-            console.log(snapshot);
+            // console.log(userRef);
+            console.log(snapshot,'okkkkkkkkkkk');
             // const data = snapshot.val();
             // updateStarCount(postElement, data);
             // console.log(data,'snapppppppppppppp');

@@ -11,6 +11,7 @@ import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import { getDownloadURL, getStorage, ref, uploadString } from "firebase/storage";
 import { ColorRing } from  'react-loader-spinner';
+import profile from '../../assets/profile.svg'
 
 
 const SideBar = () => {
@@ -18,7 +19,8 @@ const SideBar = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const storage = getStorage();
-  const data = useSelector(state => state.userLoginInfo.userInfo.user)
+  const data = useSelector(state => state.userLoginInfo.userInfo)
+  console.log(data,'dataaaaaaaaaaaaaaaa');
 
   
 

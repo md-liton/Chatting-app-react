@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector} from 'react-redux';
+import { useDispatch, useSelector} from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import SideBar from './SideBar';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -10,12 +10,14 @@ import Friends from './Friends';
 import MyGroups from './MyGroups';
 import Users from './Users';
 import BlockUsers from './BlockUsers';
+import { userLogin } from '../../Slices/UserSlice';
 
 const Home = () => {
   const auth = getAuth();
   const navigate = useNavigate();
   const data = useSelector(demo => demo.userLoginInfo.userInfo);
   const [verify, setVerify] = useState(false)
+  const dispatch =useDispatch()
 
   onAuthStateChanged(auth, (user) => {
     if (user.emailVerified) {
