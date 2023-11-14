@@ -75,6 +75,7 @@ const Registration = () => {
                         navigate('/login')
                     },3000);
                   }).then(()=>{
+                    console.log(user,'ore litonnnnnnnnnnnn');
                     set(ref(db, 'users/' + user.user.uid), {
                         username: user.user.displayName,
                         email: user.user.email,

@@ -1,21 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {BsThreeDotsVertical} from 'react-icons/bs';
 import profile from '../../assets/profile.svg';
 import { getDatabase, ref, onValue } from "firebase/database";
 
 const Users = () => {
     const db = getDatabase();
+    const [userData,setUserData] = useState([])
+    
 
     useEffect(()=>{
-        const userRef = ref(db, 'user/');
+        const userRef = ref(db, 'users/');
         onValue(userRef, (snapshot) => {
-            // console.log(userRef);
-            console.log(snapshot,'okkkkkkkkkkk');
-            // const data = snapshot.val();
-            // updateStarCount(postElement, data);
-            // console.log(data,'snapppppppppppppp');
+            let arr = []
+            snapshot.forEach((item)=>{
+                arr.push(item.val());
+            })
+            setUserData(arr);
         });
     },[])
+
+
+    console.log(userData,'okkkkkkkaaaaaaaa');
 
 
   return (
@@ -27,104 +32,28 @@ const Users = () => {
         </div>
 
 
-        <div className='flex justify-between items-center mt-[15px] border-b-[1px] pb-[10px] border-[#777]'>
-            <div className='flex gap-[20px]'>
-            <div className='h-[50px] w-[50px] rounded-full'>
-                <img src={profile} alt="img" />
-            </div>
-            <div>
-                <h6 className='text-[15px] font-open font-semibold'>Friends Reunion</h6>
-                <p className='text-[#4D4D4D] text-[13px] font-open font-semibold'>Hi Guys, Wassup!</p>
-            </div>
-            </div>
-            <div>
-                <button className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px]'>+</button>
-            </div>
-        </div>
-        <div className='flex justify-between items-center mt-[15px] border-b-[1px] pb-[10px] border-[#777]'>
-            <div className='flex gap-[20px]'>
-            <div className='h-[50px] w-[50px] rounded-full'>
-                <img src={profile} alt="img" />
-            </div>
-            <div>
-                <h6 className='text-[15px] font-open font-semibold'>Friends Reunion</h6>
-                <p className='text-[#4D4D4D] text-[13px] font-open font-semibold'>Hi Guys, Wassup!</p>
-            </div>
-            </div>
-            <div>
-                <button className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px]'>+</button>
-            </div>
-        </div>
-        <div className='flex justify-between items-center mt-[15px] border-b-[1px] pb-[10px] border-[#777]'>
-            <div className='flex gap-[20px]'>
-            <div className='h-[50px] w-[50px] rounded-full'>
-                <img src={profile} alt="img" />
-            </div>
-            <div>
-                <h6 className='text-[15px] font-open font-semibold'>Friends Reunion</h6>
-                <p className='text-[#4D4D4D] text-[13px] font-open font-semibold'>Hi Guys, Wassup!</p>
-            </div>
-            </div>
-            <div>
-                <button className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px]'>+</button>
-            </div>
-        </div>
-        <div className='flex justify-between items-center mt-[15px] border-b-[1px] pb-[10px] border-[#777]'>
-            <div className='flex gap-[20px]'>
-            <div className='h-[50px] w-[50px] rounded-full'>
-                <img src={profile} alt="img" />
-            </div>
-            <div>
-                <h6 className='text-[15px] font-open font-semibold'>Friends Reunion</h6>
-                <p className='text-[#4D4D4D] text-[13px] font-open font-semibold'>Hi Guys, Wassup!</p>
-            </div>
-            </div>
-            <div>
-                <button className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px]'>+</button>
-            </div>
-        </div>
-        <div className='flex justify-between items-center mt-[15px] border-b-[1px] pb-[10px] border-[#777]'>
-            <div className='flex gap-[20px]'>
-            <div className='h-[50px] w-[50px] rounded-full'>
-                <img src={profile} alt="img" />
-            </div>
-            <div>
-                <h6 className='text-[15px] font-open font-semibold'>Friends Reunion</h6>
-                <p className='text-[#4D4D4D] text-[13px] font-open font-semibold'>Hi Guys, Wassup!</p>
-            </div>
-            </div>
-            <div>
-                <button className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px]'>+</button>
-            </div>
-        </div>
-        <div className='flex justify-between items-center mt-[15px] border-b-[1px] pb-[10px] border-[#777]'>
-            <div className='flex gap-[20px]'>
-            <div className='h-[50px] w-[50px] rounded-full'>
-                <img src={profile} alt="img" />
-            </div>
-            <div>
-                <h6 className='text-[15px] font-open font-semibold'>Friends Reunion</h6>
-                <p className='text-[#4D4D4D] text-[13px] font-open font-semibold'>Hi Guys, Wassup!</p>
-            </div>
-            </div>
-            <div>
-                <button className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px]'>+</button>
-            </div>
-        </div>
-        <div className='flex justify-between items-center mt-[15px] border-b-[1px] pb-[10px] border-[#777]'>
-            <div className='flex gap-[20px]'>
-            <div className='h-[50px] w-[50px] rounded-full'>
-                <img src={profile} alt="img" />
-            </div>
-            <div>
-                <h6 className='text-[15px] font-open font-semibold'>Friends Reunion</h6>
-                <p className='text-[#4D4D4D] text-[13px] font-open font-semibold'>Hi Guys, Wassup!</p>
-            </div>
-            </div>
-            <div>
-                <button className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px]'>+</button>
-            </div>
-        </div>
+        {
+            userData.map((item)=>(
+                <div className='flex justify-between items-center mt-[15px] border-b-[1px] pb-[10px] border-[#777]'>
+                    <div className='flex gap-[20px]'>
+                    <div className='h-[50px] w-[50px] rounded-full overflow-hidden'>
+                        <img  src={profile} alt="img" />
+                    </div>
+                    <div>
+                        <h6 className='text-[15px] font-open font-semibold'>{item.username}</h6>
+                        <p className='text-[#4D4D4D] text-[13px] font-open font-semibold'>Hi</p>
+                    </div>
+                    </div>
+                    <div>
+                        <button className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px]'>+</button>
+                    </div>
+                </div>
+            )
+            )
+        }
+
+
+        
 
 
 

@@ -11,7 +11,9 @@ import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import { getDownloadURL, getStorage, ref, uploadString } from "firebase/storage";
 import { ColorRing } from  'react-loader-spinner';
-import profile from '../../assets/profile.svg'
+import profile from '../../assets/profile.svg';
+// import { getDatabase, ref, set } from "firebase/database";
+// import { getDatabase, ref, child, push, update } from "firebase/database";
 
 
 const SideBar = () => {
@@ -19,8 +21,8 @@ const SideBar = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const storage = getStorage();
+  // const db = getDatabase();
   const data = useSelector(state => state.userLoginInfo.userInfo)
-  console.log(data,'dataaaaaaaaaaaaaaaa');
 
   
 
@@ -81,6 +83,10 @@ const onChange = (e) => {
           }).then(()=>{
             setUpload(false)
             setImage(false)
+          }).then(()=>{
+            // set(ref(db, 'users/' + data.uid), {
+            //   photoURL: data.photoURL
+            // });
           })
         });
       });
@@ -98,12 +104,18 @@ const onChange = (e) => {
         {
           upload?
           <div className='h-full w-full bg-primary_color absolute top-0 left-0 z-[10] flex justify-center items-center'>
-          <div className='w-[500px] bg-white rounded p-[50px]'>
+          <div className='w-[500px] bg-white rounded px-[50px] py-[20px]'>
             <h3  className="font-nunito font-bold text-[35px] text-secondary_color">Upload a profile picture</h3>
 
 
-            <div className='my-[15px]  h-28 w-28 rounded-full mx-auto border-2'>
-              <img className=' h-full w-full rounded-full' src={data.photoURL} alt="img" />
+            
+             <div className='my-[15px]  h-28 w-28 rounded-full mx-auto'>
+                {
+                  image ?
+                  <div className="img-preview h-28 w-28 rounded-full overflow-hidden" />
+                  :
+                  <img className=' h-full w-full rounded-full' src={data.photoURL} alt="img" />
+                }
             </div>
             <h1 className='text-[15px] font-semibold text-primary_color text-center mb-[15px]'>{data.displayName}</h1>
 
@@ -167,7 +179,7 @@ const onChange = (e) => {
             <div className=' flex justify-center '>
             <div className='w-20 h-20 rounded-full relative hover:after:content-[""] hover:after:absolute hover:after:top-0 hover:after:left-0 hover:after:bg-overlay_color hover:after:h-full hover:after:w-full hover:after:rounded-full after:duration-300 cursor-pointer profile mb-[10px] border-2'>
 
-              <img className='cursor-pointer h-full w-full rounded-full' src={data.photoURL} alt="img" />
+              <img className='cursor-pointer h-full w-full rounded-full ' src={data.photoURL} alt="img" />
               <h1 className='text-[15px] font-semibold text-white text-center'>{data.displayName}</h1>
 
             <div>
