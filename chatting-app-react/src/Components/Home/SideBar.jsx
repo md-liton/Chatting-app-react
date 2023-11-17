@@ -173,21 +173,21 @@ const onChange = (e) => {
               
             </div>
           </div>
-        </div>
+          </div>
         :
-        <div onClick={handleUpload}  className='py-[25px] '>
-            <div className=' flex justify-center '>
-            <div className='w-20 h-20 rounded-full relative hover:after:content-[""] hover:after:absolute hover:after:top-0 hover:after:left-0 hover:after:bg-overlay_color hover:after:h-full hover:after:w-full hover:after:rounded-full after:duration-300 cursor-pointer profile mb-[10px] border-2'>
+          <div onClick={handleUpload}  className='py-[25px] '>
+              <div className=' flex justify-center '>
+              <div className='w-20 h-20 rounded-full relative hover:after:content-[""] hover:after:absolute hover:after:top-0 hover:after:left-0 hover:after:bg-overlay_color hover:after:h-full hover:after:w-full hover:after:rounded-full after:duration-300 cursor-pointer profile mb-[10px] border-2'>
 
-              <img className='cursor-pointer h-full w-full rounded-full ' src={data.photoURL} alt="img" />
-              <h1 className='text-[15px] font-semibold text-white text-center'>{data.displayName}</h1>
+                <img className='cursor-pointer h-full w-full rounded-full ' src={data.photoURL} alt="img" />
+                <h1 className='text-[15px] font-semibold text-white text-center'>{data.displayName}</h1>
 
-            <div>
-            <AiOutlineCloudUpload className='icon h-[30px] w-[30px] absolute top-[25px] left-[25px] text-white '/>
-            </div>
-            </div>
-            </div>
-        </div>
+              <div>
+              <AiOutlineCloudUpload className='icon h-[30px] w-[30px] absolute top-[25px] left-[25px] text-white '/>
+              </div>
+              </div>
+              </div>
+          </div>
 
         }
 

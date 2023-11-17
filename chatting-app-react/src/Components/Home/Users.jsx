@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import {BsThreeDotsVertical} from 'react-icons/bs';
 import profile from '../../assets/profile.svg';
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue, set } from "firebase/database";
+import { useSelector } from 'react-redux';
 
 const Users = () => {
     const db = getDatabase();
-    const [userData,setUserData] = useState([])
+    const data = useSelector(state=>state.userLoginInfo.userInfo)
+    const [userData,setUserData] = useState([]);
+    const [friendRequest,setFriendRequest]=useState([])
     
 
     useEffect(()=>{
@@ -13,14 +16,38 @@ const Users = () => {
         onValue(userRef, (snapshot) => {
             let arr = []
             snapshot.forEach((item)=>{
-                arr.push(item.val());
+                if(data.uid != item.key){
+                    arr.push(item.val());
+                }
             })
             setUserData(arr);
         });
     },[])
 
 
-    console.log(userData,'okkkkkkkaaaaaaaa');
+    const handleRequest =(item)=>{
+        set(ref(db, 'friendRequest/'+item.uid), {
+            sendername: data.displayName,
+            senderid:data.uid,
+            receivername:item.username,
+            receiverid:item.uid
+          });
+    };
+
+
+    useEffect(()=>{
+        const friendRequestRef = ref(db, 'friendRequest/');
+        onValue(friendRequestRef, (snapshot) => {
+            let arr = []
+            snapshot.forEach((item)=>{
+                arr.push(item.val().receiverid+item.val().senderid);
+            })
+            setFriendRequest(arr);
+        });
+    },[])
+
+
+
 
 
   return (
@@ -41,11 +68,17 @@ const Users = () => {
                     </div>
                     <div>
                         <h6 className='text-[15px] font-open font-semibold'>{item.username}</h6>
-                        <p className='text-[#4D4D4D] text-[13px] font-open font-semibold'>Hi</p>
+                        <p className='text-[#4D4D4D] text-[13px] font-open font-semibold'>Hi,Guyes</p>
                     </div>
                     </div>
                     <div>
-                        <button className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px]'>+</button>
+                        {
+                            friendRequest.includes(item.uid+data.uid) || friendRequest.includes(data.uid+item.uid)
+                            ?
+                            <button  className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px] text-[12px]'>Requested</button>
+                            :
+                            <button onClick={()=>handleRequest(item)} className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px] text-[12px]'>Add Friend</button>
+                        }
                     </div>
                 </div>
             )
