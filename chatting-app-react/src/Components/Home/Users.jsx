@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {BsThreeDotsVertical} from 'react-icons/bs';
 import profile from '../../assets/profile.svg';
-import { getDatabase, ref, onValue, set } from "firebase/database";
+import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { useSelector } from 'react-redux';
 
 const Users = () => {
@@ -9,6 +9,7 @@ const Users = () => {
     const data = useSelector(state=>state.userLoginInfo.userInfo)
     const [userData,setUserData] = useState([]);
     const [friendRequest,setFriendRequest]=useState([])
+    const [friendList,setFriendList]=useState([])
     
 
     useEffect(()=>{
@@ -26,7 +27,7 @@ const Users = () => {
 
 
     const handleRequest =(item)=>{
-        set(ref(db, 'friendRequest/'+item.uid), {
+        set(push(ref(db, 'friendRequest/') ), {
             sendername: data.displayName,
             senderid:data.uid,
             receivername:item.username,
@@ -43,6 +44,17 @@ const Users = () => {
                 arr.push(item.val().receiverid+item.val().senderid);
             })
             setFriendRequest(arr);
+        });
+    },[])
+
+    useEffect(()=>{
+        const friendAcceptRef = ref(db, 'friends/');
+        onValue(friendAcceptRef, (snapshot) => {
+            let arr =[]
+            snapshot.forEach((item)=>{
+                arr.push(item.val().receiverid+item.val().senderid);
+            })
+            setFriendList(arr);
         });
     },[])
 
@@ -73,6 +85,10 @@ const Users = () => {
                     </div>
                     <div>
                         {
+                            friendList.includes(item.uid+data.uid) || friendList.includes(data.uid+item.uid)
+                            ?
+                            <button  className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px] text-[12px]'>Friend</button>
+                            :
                             friendRequest.includes(item.uid+data.uid) || friendRequest.includes(data.uid+item.uid)
                             ?
                             <button  className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px] text-[12px]'>Requested</button>
