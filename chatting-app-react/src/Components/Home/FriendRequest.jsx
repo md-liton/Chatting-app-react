@@ -36,6 +36,10 @@ const FriendRequest = () => {
           })
     };
 
+    const handleCancel =(item)=>{
+        remove((ref(db, 'friendRequest/'+item.id)))
+    }
+
 
 
 
@@ -63,7 +67,7 @@ const FriendRequest = () => {
                     </div>
                     <div className='flex gap-[3px]'>
                         <button onClick={()=>handleAccept(item)} className='px-[10px] py-[3px] bg-primary_color text-white text-[12px]  font-semibold font-open rounded-[5px]'>Accept</button>
-                        <button className='px-[10px] py-[3px] bg-primary_color text-white text-[12px]  font-semibold font-open rounded-[5px]'>Cancel</button>
+                        <button onClick={()=>handleCancel(item)} className='px-[10px] py-[3px] bg-primary_color text-white text-[12px]  font-semibold font-open rounded-[5px]'>Cancel</button>
                     </div>
                </div>
             ))
