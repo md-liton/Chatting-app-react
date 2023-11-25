@@ -1,4 +1,4 @@
-import React, { createRef, useState } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import {AiOutlineHome,AiOutlineMessage,AiOutlineCloudUpload} from 'react-icons/ai';
 import{IoMdNotificationsOutline,IoMdLogOut} from 'react-icons/io';
 import {FiSettings} from 'react-icons/fi';
@@ -12,7 +12,7 @@ import "cropperjs/dist/cropper.css";
 import { getDownloadURL, getStorage, ref, uploadString } from "firebase/storage";
 import { ColorRing } from  'react-loader-spinner';
 import profile from '../../assets/profile.svg';
-// import { getDatabase, ref, set } from "firebase/database";
+import { getDatabase, ref as reff, set,update  } from "firebase/database";
 // import { getDatabase, ref, child, push, update } from "firebase/database";
 
 
@@ -21,7 +21,7 @@ const SideBar = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const storage = getStorage();
-  // const db = getDatabase();
+  const db = getDatabase();
   const data = useSelector(state => state.userLoginInfo.userInfo)
 
   
@@ -66,6 +66,20 @@ const onChange = (e) => {
     reader.readAsDataURL(files[0]);
   };
 
+//   useEffect(()=>{
+//     const userRef = ref(db, 'users/');
+//     onValue(userRef, (snapshot) => {
+//         let arr = []
+//         snapshot.forEach((item)=>{
+//           console.log(item.val(),'liiiiiiittttt');
+//             if(data.uid != item.key){
+//                 arr.push(item.val());
+//             }
+//         })
+//         setUserData(arr);
+//     });
+// },[])
+
   const getCropData = () => {
     if (typeof cropperRef.current?.cropper !== "undefined") {
       setLoading(true)
@@ -84,9 +98,12 @@ const onChange = (e) => {
             setUpload(false)
             setImage(false)
           }).then(()=>{
-            // set(ref(db, 'users/' + data.uid), {
-            //   photoURL: data.photoURL
-            // });
+            set(reff(db, 'users/' + auth.currentUser.uid), {
+              username: auth.currentUser.displayName,
+              email: auth.currentUser.email,
+              uid:auth.currentUser.uid,
+              photoURL:downloadURL,
+            });
           })
         });
       });

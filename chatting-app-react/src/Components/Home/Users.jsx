@@ -45,7 +45,7 @@ const Users = () => {
             })
             setFriendRequest(arr);
         });
-    },[])
+    },[setFriendRequest])
 
     useEffect(()=>{
         const friendAcceptRef = ref(db, 'friends/');
@@ -57,7 +57,6 @@ const Users = () => {
             setFriendList(arr);
         });
     },[])
-
 
 
 
