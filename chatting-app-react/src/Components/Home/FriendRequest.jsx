@@ -57,8 +57,8 @@ const FriendRequest = () => {
             friendRequest.map((item)=>(
                 <div className='flex justify-between items-center mt-[15px] border-b-[1px] pb-[10px] border-[#777]'>
                     <div className='flex gap-[20px]'>
-                    <div className='h-[50px] w-[50px] rounded-full'>
-                        <img src={profile} alt="img" />
+                    <div className='h-[50px] w-[50px] rounded-full overflow-hidden'>
+                        <img src={item.senderPhotoURL} alt="img" />
                     </div>
                     <div>
                         <h6 className='text-[15px] font-open font-semibold'>{item.sendername}</h6>

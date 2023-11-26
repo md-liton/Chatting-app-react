@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {BsThreeDotsVertical} from 'react-icons/bs';
-import profile from '../../assets/profile.svg';
 import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { useSelector } from 'react-redux';
 
@@ -10,6 +9,7 @@ const Users = () => {
     const [userData,setUserData] = useState([]);
     const [friendRequest,setFriendRequest]=useState([])
     const [friendList,setFriendList]=useState([])
+    const [blockr,setBlockr]=useState([])
     
 
     useEffect(()=>{
@@ -30,8 +30,10 @@ const Users = () => {
         set(push(ref(db, 'friendRequest/') ), {
             sendername: data.displayName,
             senderid:data.uid,
+            senderPhotoURL:data.photoURL,
             receivername:item.username,
-            receiverid:item.uid
+            receiverid:item.uid,
+            receiverPhotoURL:item.photoURL,
           });
     };
 
@@ -58,6 +60,16 @@ const Users = () => {
         });
     },[])
 
+    useEffect(()=>{
+        const blockRef = ref(db, 'block/');
+        onValue(blockRef, (snapshot) => {
+            let arrr=[]
+            snapshot.forEach((item)=>{
+                arrr.push(item.val().blockbyid + item.val().blockid);
+            })
+            setBlockr(arrr)
+        });
+    },[])
 
 
 
@@ -75,7 +87,7 @@ const Users = () => {
                 <div className='flex justify-between items-center mt-[15px] border-b-[1px] pb-[10px] border-[#777]'>
                     <div className='flex gap-[20px]'>
                     <div className='h-[50px] w-[50px] rounded-full overflow-hidden'>
-                        <img  src={profile} alt="img" />
+                        <img  src={item.photoURL} alt="img" />
                     </div>
                     <div>
                         <h6 className='text-[15px] font-open font-semibold'>{item.username}</h6>
@@ -92,7 +104,15 @@ const Users = () => {
                             ?
                             <button  className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px] text-[12px]'>Requested</button>
                             :
-                            <button onClick={()=>handleRequest(item)} className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px] text-[12px]'>Add Friend</button>
+                            <div>
+                                {
+                                blockr==data.uid+item.uid || blockr ==item.uid+data.uid
+                                ?
+                                ''
+                                :
+                                <button onClick={()=>handleRequest(item)} className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px] text-[12px]'>Add Friend</button>
+                                }
+                            </div>
                         }
                     </div>
                 </div>

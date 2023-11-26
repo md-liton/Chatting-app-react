@@ -27,8 +27,10 @@ const BlockUsers = () => {
         set(push(ref(db, 'friends/')), {
             sendername:item.blockby,
             senderid:item.blockbyid,
+            senderPhotoURL:item.blockbyPhotoURL,
             receivername:item.block,
             receiverid:item.blockid,
+            receiverPhotoURL:item.blockPhotoURL,
           }).then(()=>{
             remove((ref(db, 'block/'+item.key)))
           })
@@ -48,8 +50,8 @@ const BlockUsers = () => {
             block.map((item)=>(
                 <div className='flex justify-between items-center mt-[15px] border-b-[1px] pb-[10px] border-[#777]'>
                 <div className='flex gap-[20px]'>
-                <div className='h-[50px] w-[50px] rounded-full'>
-                    <img src={profile} alt="img" />
+                <div className='h-[50px] w-[50px] rounded-full overflow-hidden'>
+                    <img src={item.blockPhotoURL} alt="img" />
                 </div>
                 <div>
                     <h6 className='text-[15px] font-open font-semibold'>{item.block}</h6>

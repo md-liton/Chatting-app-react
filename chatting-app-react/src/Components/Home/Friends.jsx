@@ -26,13 +26,16 @@ const Friends = () => {
         });
     },[])
 
-    const handleOption =(item)=>{
+    const handleBlock =(item)=>{
+        console.log(item,'litooooooooo');
         if(data.uid == item.senderid){
             set(push(ref(db, 'block/') ), {
                 blockby: item.sendername,
                 blockbyid:item.senderid,
+                blockbyPhotoURL:item.senderPhotoURL,
                 block:item.receivername,
                 blockid:item.receiverid,
+                blockPhotoURL:item.receiverPhotoURL,
             }).then(()=>{
                 remove( ref(db, 'friends/' + item.key) )
             })
@@ -40,8 +43,10 @@ const Friends = () => {
             set(push(ref(db, 'block/') ), {
                 blockby: item.receivername,
                 blockbyid:item.receiverid,
+                blockbyPhotoURL:item.receiverPhotoURL,
                 block:item.sendername,
                 blockid:item.senderid,
+                blockPhotoURL:item.senderPhotoURL,
             }).then(()=>{
                 remove( ref(db, 'friends/' + item.key) )
             })
@@ -61,8 +66,10 @@ const Friends = () => {
             friendList.map((item)=>(
                 <div className='flex justify-between items-center mt-[15px] border-b-[1px] pb-[10px] border-[#777]'>
                     <div className='flex gap-[20px]'>
-                    <div className='h-[50px] w-[50px] rounded-full'>
-                        <img src={profile} alt="img" />
+                    <div className='h-[50px] w-[50px] rounded-full overflow-hidden'>
+                        <img src={
+                            data.uid == item.receiverid ? item.senderPhotoURL : item.receiverPhotoURL
+                        } alt="img" />
                     </div>
                     <div>
                         <h6 className='text-[15px] font-open font-semibold'>
@@ -73,7 +80,7 @@ const Friends = () => {
                         <p className='text-[#4D4D4D] text-[13px] font-open font-semibold'>Hi Guys, Wassup!</p>
                     </div>
                     </div>
-                    <div onClick={()=>handleOption(item)} className='relative'>
+                    <div onClick={()=>handleBlock(item)} className='relative'>
                         <h3 className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px] text-[12px] cursor-pointer'>Block</h3>
                     </div>
                 </div>
