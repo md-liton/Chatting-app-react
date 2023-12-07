@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {BsThreeDotsVertical} from 'react-icons/bs';
-import profile from '../../assets/profile.svg';
 import { getDatabase, onValue, push, ref, remove, set } from 'firebase/database';
 import { useSelector } from 'react-redux';
 
@@ -11,8 +10,6 @@ const FriendRequest = () => {
     const data = useSelector(state=>state.userLoginInfo.userInfo)
 
     const [friendRequest,setFriendRequest]=useState([])
-    
-    // const [friends,setFriends]=useState([])
 
 
     useEffect(()=>{

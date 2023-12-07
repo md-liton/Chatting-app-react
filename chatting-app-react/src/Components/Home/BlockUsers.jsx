@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {BsThreeDotsVertical} from 'react-icons/bs';
-import profile from '../../assets/profile.svg';
 import { getDatabase, ref, onValue, set, push, remove } from "firebase/database";
 import { useSelector } from 'react-redux';
 
@@ -11,19 +10,19 @@ const BlockUsers = () => {
 
     useEffect(()=>{
         const blockRef = ref(db, 'block/');
-        let arr =[]
         onValue(blockRef, (snapshot) => {
+            let arr =[]
             snapshot.forEach((item)=>{
                 if(data.uid == item.val().blockbyid){
                     arr.push({...item.val(), key:item.key})
                 }
             })
+            setBlock(arr)
         });
-        setBlock(arr)
-    },[block])
+    },[])
 
     const handleUnblock =(item)=>{
-        console.log(item.key,'iiii');
+        
         set(push(ref(db, 'friends/')), {
             sendername:item.blockby,
             senderid:item.blockbyid,
@@ -33,6 +32,7 @@ const BlockUsers = () => {
             receiverPhotoURL:item.blockPhotoURL,
           }).then(()=>{
             remove((ref(db, 'block/'+item.key)))
+            console.log(item.key,'iiii');
           })
     };
 

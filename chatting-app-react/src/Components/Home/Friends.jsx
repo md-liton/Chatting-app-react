@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {BsThreeDotsVertical} from 'react-icons/bs';
 import {SlOptionsVertical} from 'react-icons/sl';
-import profile from '../../assets/profile.svg';
 import { getDatabase, ref, onValue, set, push, remove} from 'firebase/database';
 import { useSelector } from 'react-redux';
 
@@ -10,7 +9,6 @@ const Friends = () => {
     const db = getDatabase();
     const data = useSelector(state=>state.userLoginInfo.userInfo)
     const [friendList,setFriendList]=useState([])
-    // const [option,setOption]=useState(false)
 
 
     useEffect(()=>{
@@ -27,7 +25,6 @@ const Friends = () => {
     },[])
 
     const handleBlock =(item)=>{
-        console.log(item,'litooooooooo');
         if(data.uid == item.senderid){
             set(push(ref(db, 'block/') ), {
                 blockby: item.sendername,
