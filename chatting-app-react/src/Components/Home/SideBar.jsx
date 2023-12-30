@@ -11,7 +11,6 @@ import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import { getDownloadURL, getStorage, ref, uploadString } from "firebase/storage";
 import { ColorRing } from  'react-loader-spinner';
-import profile from '../../assets/profile.svg';
 import { getDatabase, ref as reff, set,update  } from "firebase/database";
 
 

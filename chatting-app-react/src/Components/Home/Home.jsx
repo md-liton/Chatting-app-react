@@ -3,7 +3,6 @@ import { useDispatch, useSelector} from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import SideBar from './SideBar';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import SearchBar from './SearchBar';
 import GroupList from './GroupList';
 import FriendRequest from './FriendRequest';
 import Friends from './Friends';
@@ -42,12 +41,11 @@ const Home = () => {
       {
         verify ?
         <div className='h-screen'>
-        <div className='flex gap-[43px] p-[15px]'>
+        <div className='flex gap-[43px] px-[15px] py-[10px]'>
           <div className='w-[186px] bg-primary_color rounded-[10px]'>
             <SideBar/>
           </div>
           <div className='w-[420px]'>
-            <SearchBar/>
             <GroupList/>
             <FriendRequest/>
           </div>

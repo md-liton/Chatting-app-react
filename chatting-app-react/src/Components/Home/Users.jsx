@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {BsThreeDotsVertical} from 'react-icons/bs';
 import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { useSelector } from 'react-redux';
+import {AiOutlineSearch} from 'react-icons/ai';
 
 const Users = () => {
     const db = getDatabase();
@@ -10,6 +11,7 @@ const Users = () => {
     const [friendRequest,setFriendRequest]=useState([])
     const [friendList,setFriendList]=useState([])
     const [blockr,setBlockr]=useState([])
+    const [search,setSearch] = useState([])
     
 
     useEffect(()=>{
@@ -71,6 +73,23 @@ const Users = () => {
         });
     },[])
 
+    const handleSearch = (e)=>{
+        let arr =[]
+        if(e.target.value.length == 0){
+            setSearch([])
+        }else{
+            userData.filter((item)=>{
+                let searchfilter = item.username.toLowerCase().includes(e.target.value)
+                if(searchfilter){
+                    arr.push(item);
+                    setSearch(arr)
+                }
+            })
+        }
+    }
+
+    
+
 
 
   return (
@@ -81,44 +100,89 @@ const Users = () => {
         <BsThreeDotsVertical className='text-primary_color'/>
         </div>
 
+        <div className='relative my-[10px]'>
+       <input onChange={handleSearch} className='focus:outline-none w-full border rounded-[10px] py-[10px] px-[35px] font-semibold shadow-md ' type="text" placeholder='Search' />
+       <AiOutlineSearch className='text-[20px] absolute top-[13px] right-[10px] cursor-pointer text-primary_color'/>
+       </div>
 
-        {
-            userData.map((item)=>(
-                <div className='flex justify-between items-center mt-[15px] border-b-[1px] pb-[10px] border-[#777]'>
-                    <div className='flex gap-[20px]'>
-                    <div className='h-[50px] w-[50px] rounded-full overflow-hidden'>
-                        <img  src={item.photoURL} alt="img" />
-                    </div>
-                    <div>
-                        <h6 className='text-[15px] font-open font-semibold'>{item.username}</h6>
-                        <p className='text-[#4D4D4D] text-[13px] font-open font-semibold'>Hi,Guyes</p>
-                    </div>
-                    </div>
-                    <div>
-                        {
-                            friendList.includes(item.uid+data.uid) || friendList.includes(data.uid+item.uid)
-                            ?
-                            <button  className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px] text-[12px]'>Friend</button>
-                            :
-                            friendRequest.includes(item.uid+data.uid) || friendRequest.includes(data.uid+item.uid)
-                            ?
-                            <button  className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px] text-[12px]'>Requested</button>
-                            :
-                            <div>
-                                {
-                                blockr==data.uid+item.uid || blockr ==item.uid+data.uid
-                                ?
-                                ''
-                                :
-                                <button onClick={()=>handleRequest(item)} className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px] text-[12px]'>Add Friend</button>
-                                }
-                            </div>
-                        }
-                    </div>
+       {
+        search.length > 0 
+        ?
+        search.map((item)=>(
+            <div className='flex justify-between items-center mt-[15px] border-b-[1px] pb-[10px] border-[#777]'>
+                <div className='flex gap-[20px]'>
+                <div className='h-[50px] w-[50px] rounded-full overflow-hidden border'>
+                    <img  src={item.photoURL} alt="img" />
                 </div>
-            )
-            )
-        }
+                <div>
+                    <h6 className='text-[15px] font-open font-semibold'>{item.username}</h6>
+                    <p className='text-[#4D4D4D] text-[13px] font-open font-semibold'>Hi,Guyes</p>
+                </div>
+                </div>
+                <div>
+                    {
+                        friendList.includes(item.uid+data.uid) || friendList.includes(data.uid+item.uid)
+                        ?
+                        <button  className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px] text-[12px]'>Friend</button>
+                        :
+                        friendRequest.includes(item.uid+data.uid) || friendRequest.includes(data.uid+item.uid)
+                        ?
+                        <button  className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px] text-[12px]'>Requested</button>
+                        :
+                        <div>
+                            {
+                            blockr==data.uid+item.uid || blockr ==item.uid+data.uid
+                            ?
+                            ''
+                            :
+                            <button onClick={()=>handleRequest(item)} className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px] text-[12px]'>Add Friend</button>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        )
+        )
+        :
+        userData.map((item)=>(
+            <div className='flex justify-between items-center mt-[15px] border-b-[1px] pb-[10px] border-[#777]'>
+                <div className='flex gap-[20px]'>
+                <div className='h-[50px] w-[50px] rounded-full overflow-hidden border'>
+                    <img  src={item.photoURL} alt="img" />
+                </div>
+                <div>
+                    <h6 className='text-[15px] font-open font-semibold'>{item.username}</h6>
+                    <p className='text-[#4D4D4D] text-[13px] font-open font-semibold'>Hi,Guyes</p>
+                </div>
+                </div>
+                <div>
+                    {
+                        friendList.includes(item.uid+data.uid) || friendList.includes(data.uid+item.uid)
+                        ?
+                        <button  className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px] text-[12px]'>Friend</button>
+                        :
+                        friendRequest.includes(item.uid+data.uid) || friendRequest.includes(data.uid+item.uid)
+                        ?
+                        <button  className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px] text-[12px]'>Requested</button>
+                        :
+                        <div>
+                            {
+                            blockr==data.uid+item.uid || blockr ==item.uid+data.uid
+                            ?
+                            ''
+                            :
+                            <button onClick={()=>handleRequest(item)} className='px-[10px] py-[5px] bg-primary_color text-white  font-semibold font-open rounded-[5px] text-[12px]'>Add Friend</button>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        )
+        )
+       }
+
+
+        
 
 
         

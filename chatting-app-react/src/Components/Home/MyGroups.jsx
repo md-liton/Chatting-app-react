@@ -39,8 +39,8 @@ const MyGroups = () => {
             mygroup.map((item)=>(
             <div className='flex justify-between items-center mt-[15px] border-b-[1px] pb-[10px] border-[#777]'>
             <div className='flex gap-[20px]'>
-            <div className='h-[50px] w-[50px] rounded-full'>
-                <img src={profile} alt="img" />
+            <div className='h-[50px] w-[50px] rounded-full overflow-hidden'>
+                <img src={item.groupPhoto} alt="img" className='h-full w-full' />
             </div>
             <div>
                 <h6 className='text-[15px] font-open font-semibold'>{item.groupname}</h6>
