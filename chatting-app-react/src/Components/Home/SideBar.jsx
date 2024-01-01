@@ -2,7 +2,7 @@ import React, { createRef, useEffect, useState } from 'react';
 import {AiOutlineHome,AiOutlineMessage,AiOutlineCloudUpload} from 'react-icons/ai';
 import{IoMdNotificationsOutline,IoMdLogOut} from 'react-icons/io';
 import {FiSettings} from 'react-icons/fi';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, signOut, updateProfile } from "firebase/auth";
 import { useDispatch, useSelector} from 'react-redux';
 import { userLogin } from '../../Slices/UserSlice';
@@ -14,7 +14,7 @@ import { ColorRing } from  'react-loader-spinner';
 import { getDatabase, ref as reff, set,update  } from "firebase/database";
 
 
-const SideBar = () => {
+const SideBar = ({active}) => {
   const auth = getAuth();
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -197,14 +197,18 @@ const onChange = (e) => {
 
 
 
-        <div className='py-[15px] flex justify-center after:content-[""] after:absolute after:h-full after:w-[80%] after:bg-white after:top-0 after:right-0 after:rounded-l-lg relative after:z-[-1] z-[1] before:content-[""] before:absolute before:h-full before:w-[15px] before:top-0 before:right-0 before:bg-primary_color before:rounded-l-lg after:cursor-pointer before:cursor-pointer'>
-        <AiOutlineHome className='h-[45px] w-[45px] text-primary_color cursor-pointer'/>
+        <Link to='/'>
+        <div className={`py-[15px] flex justify-center ${active=='home' && 'after:content-[""] after:absolute after:h-full after:w-[80%] after:bg-white after:top-0 after:right-0 after:rounded-l-lg relative after:z-[-1] z-[1] before:content-[""] before:absolute before:h-full before:w-[15px] before:top-0 before:right-0 before:bg-primary_color before:rounded-l-lg after:cursor-pointer before:cursor-pointer' }`}>
+        <AiOutlineHome className={`h-[45px] w-[45px] ${active=='home' ? 'text-primary_color' : 'text-white'} cursor-pointer`}/>
         </div>
+        </Link>
+
+          <Link to='/message' className={`flex justify-center ${active=='message' && 'after:content-[""] after:absolute after:h-full after:w-[80%] after:bg-white after:top-0 after:right-0 after:rounded-l-lg relative after:z-[-1] z-[1] before:content-[""] before:absolute before:h-full before:w-[15px] before:top-0 before:right-0 before:bg-primary_color before:rounded-l-lg after:cursor-pointer before:cursor-pointer' }`}>
         <div className='py-[15px] '>
-          <div className='flex justify-center '>
-          <AiOutlineMessage className='h-[45px] w-[45px] text-[#BAD1FF] cursor-pointer'/>
-          </div>
+          <AiOutlineMessage className={`h-[45px] w-[45px] ${active=='message'?'text-primary_color ' : 'text-[#BAD1FF]'} cursor-pointer`}/>
         </div>
+          </Link>
+
         <div className='py-[15px] '>
           <div  className='flex justify-center'>
             <IoMdNotificationsOutline className='h-[45px] w-[45px] text-white cursor-pointer'/>
