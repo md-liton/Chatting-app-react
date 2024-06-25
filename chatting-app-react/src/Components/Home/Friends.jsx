@@ -50,6 +50,10 @@ const Friends = () => {
         }
     }
 
+    const handleMessageOpen =()=>{
+        console.log('okkkkkkk');
+    }
+
 
   return (
     <>
@@ -62,7 +66,7 @@ const Friends = () => {
         {
             friendList.map((item)=>(
                 <div className='flex justify-between items-center mt-[15px] border-b-[1px] pb-[10px] border-[#777]'>
-                    <div className='flex gap-[20px]'>
+                    <div className='flex gap-[20px] cursor-pointer' onClick={handleMessageOpen}>
                     <div className='h-[50px] w-[50px] rounded-full overflow-hidden'>
                         <img src={
                             data.uid == item.receiverid ? item.senderPhotoURL : item.receiverPhotoURL

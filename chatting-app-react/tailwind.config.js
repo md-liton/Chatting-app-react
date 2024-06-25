@@ -14,7 +14,10 @@ export default {
     fontFamily: {
         'nunito': ['Nunito', 'sans-serif'],
         'open': ['Open Sans', 'sans-serif'],
-      }
+    },
+    backgroundImage: {
+      pic: "url(src/assets/message.png)",
+    }
     },
   },
   plugins: [],
